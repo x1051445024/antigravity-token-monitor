@@ -1,0 +1,13 @@
+{
+  "name": "token-monitor",
+  "displayName": "Token & Cache Monitor",
+  "version": "2.0.0",
+  "description": "实时监控 Antigravity 2.0 各模型的 Token 消耗、缓存命中率与分模型 API 费用估算。",
+  "author": {
+    "name": "x1051445024",
+    "url": "https://github.com/x1051445024"
+  },
+  "homepage": "https://github.com/x1051445024/antigravity-token-monitor",
+  "repository": "https://github.com/x1051445024/antigravity-token-monitor",
+  "logo": "assets/logo.svg"
+}

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Token Monitor</title>
+  <!-- __INLINE_STYLES__ -->
+</head>
+<body>
+  <div class="panel">
+    <!-- Header -->
+    <div class="panel-header">
+      <div class="title-wrap">
+        <span class="icon-badge">⚡</span>
+        <h1 class="panel-title">
+          <span>Antigravity Token 监视器</span>
+          <span class="version-pill">v2.0</span>
+        </h1>
+      </div>
+      <div class="header-actions">
+        <label class="fx-box" title="自定义 1 USD 兑换 CNY 汇率">
+          <span>1$ = ¥</span>
+          <input id="input-fx-rate" type="number" step="0.01" min="0.1" max="100" value="7.20">
+        </label>
+        <button id="btn-refresh" class="btn-refresh">🔄 刷新</button>
+      </div>
+    </div>
+
+    <!-- 视图模式切换 Tabs -->
+    <div class="nav-tabs">
+      <button id="tab-global" class="tab-btn active">📊 所有对话汇总 & 趋势</button>
+      <button id="tab-single" class="tab-btn">💬 单会话步骤明细</button>
+    </div>
+
+    <!-- 时间筛选栏 (全局模式下可用) -->
+    <div id="filter-container" class="filter-card">
+      <div class="filter-row">
+        <span class="stat-label">时间范围筛选:</span>
+        <div class="filter-buttons">
+          <button class="btn-filter active" data-range="all">全部</button>
+          <button class="btn-filter" data-range="today">今天</button>
+          <button class="btn-filter" data-range="yesterday">昨天</button>
+          <button class="btn-filter" data-range="7d">近 7 天</button>
+          <button class="btn-filter" data-range="custom">自定义</button>
+        </div>
+      </div>
+      <div id="custom-date-box" class="custom-date-row" hidden>
+        <span>从</span>
+        <input type="date" id="input-start-date" class="date-input">
+        <span>至</span>
+        <input type="date" id="input-end-date" class="date-input">
+        <button id="btn-apply-custom" class="btn-filter">查询</button>
+      </div>
+    </div>
+
+    <!-- 统一风格的 6 宫格核心指标卡片 (2 列 x 3 行) -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label-row">
+          <span class="stat-label">预估 API 费用 (人民币)</span>
+        </div>
+        <span id="val-cost-cny" class="stat-val color-cny">¥--</span>
+        <span id="sub-cost-cny" class="stat-sub">输入 ¥-- · 缓存 ¥-- · 输出 ¥--</span>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label-row">
+          <span class="stat-label">预估 API 费用 (美元)</span>
+          <select id="select-pricing" class="pricing-select" title="选择自动分步计费或统一按指定模型折算">
+            <option value="auto">🤖 自动 (实际模型)</option>
+          </select>
+        </div>
+        <span id="val-cost-usd" class="stat-val color-usd">$--</span>
+        <span id="sub-cost-usd" class="stat-sub">输入 $-- · 缓存 $-- · 输出 $--</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">总体缓存命中率</span>
+        <span id="val-hit-rate" class="stat-val color-hit">--%</span>
+        <span id="sub-hit-rate" class="stat-sub">总消耗: -- Tokens</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">缓存命中 (Read)</span>
+        <span id="val-cache-read" class="stat-val color-cache">--</span>
+        <span class="stat-sub">复用 Tokens (低延迟/低耗)</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">未缓存输入 (Input)</span>
+        <span id="val-input" class="stat-val color-input">--</span>
+        <span class="stat-sub">全量计算 Tokens</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">模型生成 (Output)</span>
+        <span id="val-output" class="stat-val color-output">--</span>
+        <span class="stat-sub">思考与回答 Tokens</span>
+      </div>
+    </div>
+
+    <!-- 全局视图区域: 模型分布 + 趋势图 + 会话列表 -->
+    <div id="view-global" class="panel-section">
+      <!-- 按模型消耗分布卡片 -->
+      <div id="model-breakdown-card" class="breakdown-card">
+        <div class="chart-header">
+          <span>按模型消耗分布</span>
+          <span id="model-breakdown-sub" class="stat-label">点击模型可筛选下方对话</span>
+        </div>
+        <div id="model-breakdown-list" class="model-breakdown-list">
+          <div class="stat-label" style="text-align: center; padding: 6px;">加载中...</div>
+        </div>
+      </div>
+
+      <!-- 每日趋势图表 -->
+      <div class="chart-card">
+        <div class="chart-header">
+          <span>用量趋势图 (每日 Token 消耗分布)</span>
+          <div class="chart-legend">
+            <div class="legend-item"><span class="dot dot-cache"></span><span>缓存命中</span></div>
+            <div class="legend-item"><span class="dot dot-input"></span><span>未缓存输入</span></div>
+            <div class="legend-item"><span class="dot dot-output"></span><span>生成输出</span></div>
+          </div>
+        </div>
+        <div id="chart-area" class="chart-wrapper">
+          <svg id="svg-chart" class="svg-chart" viewBox="0 0 500 150">
+            <!-- 动态生成柱状图 -->
+          </svg>
+        </div>
+      </div>
+
+      <!-- 会话消耗排行榜 -->
+      <div class="list-card">
+        <div class="chart-header">
+          <div class="list-header-left">
+            <span>各对话消耗与费用明细</span>
+            <span id="active-model-filter" class="filter-pill" hidden>
+              <span id="active-model-filter-label"></span>
+              <button id="btn-clear-model-filter" type="button" title="清除模型筛选">×</button>
+            </span>
+          </div>
+          <span id="conv-count-badge" class="stat-label">0 个对话</span>
+        </div>
+
+        <div class="list-toolbar">
+          <input id="input-search-conv" class="search-input" type="search" placeholder="搜索对话标题或 ID...">
+          <select id="select-sort" class="pricing-select" title="对话排序方式">
+            <option value="total">按总用量</option>
+            <option value="recent">按最近时间</option>
+            <option value="cost">按预估费用</option>
+            <option value="hitRate">按命中率</option>
+          </select>
+        </div>
+
+        <div class="list-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>对话主题</th>
+                <th>输入</th>
+                <th>缓存</th>
+                <th>生成</th>
+                <th>命中率</th>
+                <th class="text-right">预估费用</th>
+              </tr>
+            </thead>
+            <tbody id="conv-tbody">
+              <tr>
+                <td colspan="6" style="text-align: center; color: var(--muted-foreground); padding: 12px;">加载中...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 单会话视图区域: 步骤明细表格 -->
+    <div id="view-single" class="panel-section" hidden>
+      <div class="list-card">
+        <div class="chart-header">
+          <span id="single-conv-title">单会话步骤明细</span>
+          <div class="single-header-actions">
+            <button id="btn-open-conv" class="btn-refresh" hidden>↗ 跳转对话</button>
+            <button id="btn-back-global" class="btn-refresh">← 返回全局</button>
+          </div>
+        </div>
+        <div id="single-model-strip" class="single-model-strip" hidden></div>
+        <div class="list-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>轮次</th>
+                <th>模型</th>
+                <th>未缓存输入</th>
+                <th>缓存命中</th>
+                <th>生成输出</th>
+                <th>命中率</th>
+                <th class="text-right">单步费用</th>
+              </tr>
+            </thead>
+            <tbody id="steps-tbody">
+              <tr>
+                <td colspan="7" style="text-align: center; color: var(--muted-foreground); padding: 12px;">加载中...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-info">
+      <span id="footer-text">数据来源: ~/.gemini/antigravity/brain · 汇率参考 1 USD = 7.20 CNY</span>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      const search = window.location.search || '';
+      function loadScript(src, callback) {
+        const s = document.createElement('script');
+        s.src = src + (search ? (src.includes('?') ? '&' : '?') + search.replace(/^\?/, '') : '');
+        s.onload = function() {
+          if (callback) callback();
+        };
+        s.onerror = function(err) {
+          console.warn('Script failed to load:', src, err);
+          if (callback) callback();
+        };
+        (document.body || document.head).appendChild(s);
+      }
+
+      // 依次加载 preload.js 与 app.js，传递网关鉴权 token
+      loadScript('/preload.js', function() {
+        loadScript('/app.js');
+      });
+    })();
+  </script>
+</body>
+</html>

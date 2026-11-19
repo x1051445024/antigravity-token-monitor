@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <rect width="64" height="64" rx="14" fill="#2563EB"/>
+  <!-- 仪表盘弧线与闪电图标 -->
+  <path d="M16 42 A 18 18 0 1 1 48 42" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-dasharray="2 6"/>
+  <path d="M34 16 L22 34 L32 34 L30 48 L42 30 L32 30 Z" fill="#FBBF24" stroke="#FFFFFF" stroke-width="1.5" stroke-linejoin="round"/>
+</svg>

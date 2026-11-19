@@ -1,0 +1,651 @@
+:root {
+  --radius: 10px;
+  --gap: 10px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--background, #181825);
+  color: var(--foreground, #cdd6f4);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* Note: preload.js overrides document.body.style.padding = '0', so outer spacing lives on .panel */
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 12px;
+}
+
+/* Header & Tab navigation */
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border, #313244);
+  flex-wrap: wrap;
+}
+
+.title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.icon-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: var(--primary, #3b82f6);
+  color: #fff;
+  font-size: 15px;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.panel-title {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0;
+  color: var(--foreground, #e2e8f0);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.version-pill {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: rgba(59, 130, 246, 0.16);
+  color: var(--primary, #3b82f6);
+  border: 1px solid rgba(59, 130, 246, 0.35);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.fx-box {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--card, #252538);
+  border: 1px solid var(--border, #3b3b54);
+  border-radius: 6px;
+  padding: 2px 6px;
+  font-size: 11px;
+  color: var(--muted-foreground, #94a3b8);
+}
+
+.fx-box input {
+  width: 48px;
+  background: transparent;
+  border: none;
+  color: var(--foreground, #e2e8f0);
+  font-size: 11px;
+  font-weight: 600;
+  outline: none;
+  padding: 0;
+  text-align: right;
+}
+
+.nav-tabs {
+  display: flex;
+  gap: 6px;
+  background: var(--card, #252538);
+  padding: 4px;
+  border-radius: 8px;
+  border: 1px solid var(--border, #3b3b54);
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 6px 10px;
+  border: none;
+  background: transparent;
+  color: var(--muted-foreground, #94a3b8);
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+
+.tab-btn:hover {
+  color: var(--foreground, #e2e8f0);
+}
+
+.tab-btn.active {
+  background: var(--primary, #3b82f6);
+  color: #fff;
+  font-weight: 600;
+}
+
+/* 时间筛选栏 */
+.filter-card {
+  background: var(--card, #252538);
+  border: 1px solid var(--card-border, var(--border, #3b3b54));
+  border-radius: var(--radius);
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.filter-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.filter-buttons {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.btn-filter {
+  background: var(--background, #1e1e2e);
+  border: 1px solid var(--border, #3b3b54);
+  color: var(--muted-foreground, #94a3b8);
+  padding: 3px 9px;
+  border-radius: 6px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-filter:hover {
+  color: var(--foreground, #e2e8f0);
+  border-color: var(--primary, #3b82f6);
+}
+
+.btn-filter.active {
+  background: var(--primary, #3b82f6);
+  color: #fff;
+  border-color: var(--primary, #3b82f6);
+  font-weight: 600;
+}
+
+.btn-refresh {
+  background: var(--background, #1e1e2e);
+  border: 1px solid var(--border, #3b3b54);
+  color: var(--foreground, #e2e8f0);
+  border-radius: 6px;
+  padding: 3px 8px;
+  font-size: 11px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-refresh:hover {
+  background: var(--primary, #3b82f6);
+  color: #fff;
+  border-color: var(--primary, #3b82f6);
+}
+
+.custom-date-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--muted-foreground, #94a3b8);
+  flex-wrap: wrap;
+}
+
+.date-input {
+  background: var(--background, #1e1e2e);
+  border: 1px solid var(--border, #3b3b54);
+  color: var(--foreground, #e2e8f0);
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 11px;
+}
+
+/* 核心指标卡片网格 (2 列 x 3 行) */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.stat-card {
+  background: var(--card, #252538);
+  border: 1px solid var(--card-border, var(--border, #3b3b54));
+  border-radius: var(--radius);
+  padding: 9px 11px;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.stat-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 4px;
+}
+
+.stat-label {
+  font-size: 11px;
+  color: var(--muted-foreground, #94a3b8);
+}
+
+.pricing-select {
+  background: var(--background, #1e1e2e);
+  border: 1px solid var(--border, #3b3b54);
+  color: var(--foreground, #e2e8f0);
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 10px;
+  cursor: pointer;
+  outline: none;
+  max-width: 155px;
+}
+
+.stat-val {
+  font-size: 17px;
+  font-weight: 700;
+  margin-top: 2px;
+}
+
+.stat-sub {
+  font-size: 10px;
+  color: var(--muted-foreground, #94a3b8);
+  margin-top: 2px;
+  word-break: break-word;
+}
+
+.color-hit { color: #10b981; }
+.color-cache { color: #3b82f6; }
+.color-input { color: #f59e0b; }
+.color-output { color: #a855f7; }
+.color-cny { color: #10b981; }
+.color-usd { color: #38bdf8; }
+
+.panel-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+}
+
+/* 按模型消耗分布卡片 */
+.breakdown-card {
+  background: var(--card, #252538);
+  border: 1px solid var(--card-border, var(--border, #3b3b54));
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.model-breakdown-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.model-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 6px 8px;
+  border-radius: 7px;
+  border: 1px solid var(--border, #3b3b54);
+  background: var(--background, #1e1e2e);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.model-row:hover {
+  border-color: var(--primary, #3b82f6);
+}
+
+.model-row.active {
+  border-color: var(--primary, #3b82f6);
+  box-shadow: inset 0 0 0 1px var(--primary, #3b82f6);
+  background: rgba(59, 130, 246, 0.08);
+}
+
+.model-row-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+}
+
+.model-name-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  font-weight: 600;
+}
+
+.model-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.model-meta-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  white-space: nowrap;
+  color: var(--muted-foreground, #94a3b8);
+}
+
+.model-cost-text {
+  font-weight: 600;
+  color: #10b981;
+}
+
+.model-bar-track {
+  width: 100%;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(128, 128, 128, 0.18);
+  overflow: hidden;
+}
+
+.model-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.25s ease;
+}
+
+/* 趋势图表区 */
+.chart-card {
+  background: var(--card, #252538);
+  border: 1px solid var(--card-border, var(--border, #3b3b54));
+  border-radius: var(--radius);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  flex-wrap: wrap;
+}
+
+.chart-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 6px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.chart-wrapper::-webkit-scrollbar {
+  height: 6px;
+}
+
+.chart-wrapper::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 3px;
+}
+
+.chart-wrapper::-webkit-scrollbar-thumb {
+  background: var(--border, #3b3b54);
+  border-radius: 3px;
+}
+
+.chart-wrapper::-webkit-scrollbar-thumb:hover {
+  background: var(--primary, #3b82f6);
+}
+
+.svg-chart {
+  min-width: 100%;
+  height: 155px;
+  display: block;
+}
+
+/* 图表图例 */
+.chart-legend {
+  display: flex;
+  gap: 12px;
+  font-size: 11px;
+  color: var(--muted-foreground, #94a3b8);
+  justify-content: flex-end;
+  font-weight: normal;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  display: inline-block;
+}
+
+.dot-cache { background: #3b82f6; }
+.dot-input { background: #f59e0b; }
+.dot-output { background: #a855f7; }
+
+/* 会话列表与工具栏 */
+.list-card {
+  background: var(--card, #252538);
+  border: 1px solid var(--card-border, var(--border, #3b3b54));
+  border-radius: var(--radius);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.list-header-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.filter-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(59, 130, 246, 0.16);
+  color: var(--primary, #3b82f6);
+  border: 1px solid rgba(59, 130, 246, 0.35);
+}
+
+.filter-pill button {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 1;
+  padding: 0 2px;
+}
+
+.list-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.search-input {
+  flex: 1;
+  min-width: 120px;
+  background: var(--background, #1e1e2e);
+  border: 1px solid var(--border, #3b3b54);
+  color: var(--foreground, #e2e8f0);
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 11px;
+  outline: none;
+}
+
+.search-input:focus {
+  border-color: var(--primary, #3b82f6);
+}
+
+.list-scroll {
+  max-height: 280px;
+  overflow-y: auto;
+  border: 1px solid var(--border, #3b3b54);
+  border-radius: 6px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+
+th {
+  background: var(--background, #181825);
+  color: var(--muted-foreground, #94a3b8);
+  padding: 6px 6px;
+  text-align: left;
+  font-weight: 500;
+  border-bottom: 1px solid var(--border, #3b3b54);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  white-space: nowrap;
+}
+
+td {
+  padding: 6px 6px;
+  border-bottom: 1px solid var(--border, #3b3b54);
+  vertical-align: middle;
+}
+
+tr:hover td {
+  background: rgba(128, 128, 128, 0.08);
+}
+
+.conv-row {
+  cursor: pointer;
+}
+
+.conv-title {
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+.conv-subrow {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+  margin-top: 2px;
+  font-size: 10px;
+  color: var(--muted-foreground, #94a3b8);
+}
+
+.model-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  white-space: nowrap;
+  border: 1px solid transparent;
+}
+
+.model-chip-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.single-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.single-model-strip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  padding: 4px 2px;
+}
+
+.badge-tag {
+  display: inline-block;
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+.tag-high { background: rgba(16, 185, 129, 0.15); color: #10b981; }
+.tag-low { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
+
+.cost-cell {
+  font-weight: 600;
+  color: #10b981;
+  white-space: nowrap;
+}
+
+.text-muted {
+  color: var(--muted-foreground, #94a3b8);
+}
+
+.text-right { text-align: right; }
+
+.footer-info {
+  font-size: 11px;
+  color: var(--muted-foreground, #94a3b8);
+  text-align: center;
+}
